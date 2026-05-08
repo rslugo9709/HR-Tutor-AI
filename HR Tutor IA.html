@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HR Tutor AI — Asesor de RRHH con Inteligencia Artificial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1d4ed8;
+      --blue-dark: #1e3a8a;
+      --blue-light: #3b82f6;
+      --blue-bg: #eff6ff;
+      --green: #059669;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 999;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .header-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 2rem;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 1.3rem; font-weight: 800; color: var(--blue-dark);
+      text-decoration: none;
+    }
+    .logo-icon {
+      background: var(--blue); color: #fff;
+      width: 34px; height: 34px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .logo span { color: var(--blue-light); }
+    nav { display: flex; align-items: center; gap: 1.8rem; }
+    nav a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.9rem; font-weight: 600; transition: color 0.2s;
+    }
+    nav a:hover { color: var(--blue); }
+    .btn-header {
+      background: var(--blue); color: #fff !important;
+      padding: 0.5rem 1.3rem; border-radius: 6px;
+      font-size: 0.88rem; font-weight: 700;
+      transition: background 0.2s !important;
+    }
+    .btn-header:hover { background: var(--blue-dark) !important; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, #1d4ed8 60%, #2563eb 100%);
+      color: #fff; padding: 6rem 2rem 5rem; text-align: center;
+    }
+    .hero-inner { max-width: 760px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #bfdbfe; padding: 0.3rem 1rem; border-radius: 999px;
+      font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800; line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, #93c5fd, #6ee7b7);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub { font-size: 1.1rem; color: #bfdbfe; max-width: 580px; margin: 0 auto 2.5rem; }
+    .hero-form {
+      display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center;
+      max-width: 520px; margin: 0 auto;
+    }
+    .hero-form input {
+      flex: 1; min-width: 180px;
+      padding: 0.75rem 1rem; border-radius: 6px;
+      border: none; font-size: 0.95rem; font-family: inherit;
+      outline: none; color: var(--text);
+    }
+    .hero-form button {
+      background: #10b981; color: #fff;
+      padding: 0.75rem 1.6rem; border-radius: 6px;
+      border: none; font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .hero-form button:hover { background: #059669; }
+    .hero-note { margin-top: 0.8rem; font-size: 0.78rem; color: #93c5fd; }
+
+    /* STATS */
+    .stats-bar { background: var(--blue-dark); padding: 1.2rem 2rem; }
+    .stats-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    }
+    .stat { text-align: center; color: #fff; }
+    .stat-num { font-size: 1.6rem; font-weight: 800; color: #93c5fd; }
+    .stat-label { font-size: 0.78rem; color: #bfdbfe; margin-top: 0.1rem; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      text-align: center; font-size: 0.78rem; font-weight: 700;
+      color: var(--blue); letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    h2 {
+      text-align: center; font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 800; margin-bottom: 0.7rem; line-height: 1.25;
+    }
+    .section-sub {
+      text-align: center; color: var(--muted);
+      max-width: 520px; margin: 0 auto 3rem; font-size: 0.95rem;
+    }
+
+    /* BENEFICIOS */
+    .benefits { background: var(--white); }
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+    }
+    .benefit-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem 1.8rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .benefit-card:hover { box-shadow: 0 8px 28px rgba(29,78,216,0.12); transform: translateY(-3px); }
+    .benefit-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1.1rem;
+    }
+    .bi-blue { background: #dbeafe; }
+    .bi-green { background: #d1fae5; }
+    .bi-purple { background: #ede9fe; }
+    .benefit-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .benefit-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+    .benefit-tag {
+      display: inline-block; margin-top: 0.9rem;
+      background: var(--blue-bg); color: var(--blue);
+      font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.7rem; border-radius: 999px;
+    }
+    .incentivo {
+      margin-top: 2.5rem;
+      background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+      border: 1.5px solid #bfdbfe; border-radius: 12px;
+      padding: 1.8rem 2rem; text-align: center;
+    }
+    .incentivo p { font-size: 1rem; font-weight: 600; color: var(--blue-dark); }
+    .incentivo span { color: var(--green); }
+
+    /* PROBLEMAS */
+    .problems { background: #f9fafb; }
+    .problems-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem;
+    }
+    .problem-card {
+      background: var(--white); border-radius: 10px;
+      border: 1px solid var(--border); padding: 1.5rem;
+    }
+    .problem-card .p-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+    .problem-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .problem-card p { font-size: 0.83rem; color: var(--muted); }
+
+    /* SERVICIOS */
+    .services { background: var(--white); }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
+    }
+    .service-item {
+      display: flex; align-items: flex-start; gap: 0.8rem;
+      padding: 1.2rem; border-radius: 10px; border: 1px solid var(--border);
+    }
+    .service-check {
+      background: #d1fae5; color: var(--green);
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+    }
+    .service-item h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .service-item p { font-size: 0.8rem; color: var(--muted); }
+
+    /* CÓMO FUNCIONA */
+    .how { background: var(--blue-dark); color: #fff; }
+    .how h2 { color: #fff; }
+    .how .section-label { color: #93c5fd; }
+    .how .section-sub { color: #93c5fd; }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;
+    }
+    .step-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; padding: 1.8rem;
+    }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--blue-light); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; margin-bottom: 1rem;
+    }
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .step-card p { font-size: 0.85rem; color: #bfdbfe; }
+
+    /* FORM */
+    .form-section { background: #f9fafb; }
+    .form-layout {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;
+    }
+    @media (max-width: 680px) { .form-layout { grid-template-columns: 1fr; } }
+    .form-left h2 { text-align: left; font-size: 2rem; margin-bottom: 0.8rem; }
+    .form-left p { color: var(--muted); font-size: 0.93rem; margin-bottom: 1.5rem; }
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .check-list li {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.9rem; font-weight: 600;
+    }
+    .check-list li::before {
+      content: "✓"; background: #d1fae5; color: var(--green);
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 800; flex-shrink: 0;
+    }
+    .wp-form {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    }
+    .wp-form h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .wp-form .form-sub { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .fg { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+    input {
+      width: 100%; border: 1px solid var(--border);
+      color: var(--text); padding: 0.65rem 0.9rem;
+      border-radius: 6px; font-size: 0.93rem; font-family: inherit;
+      outline: none; background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus {
+      border-color: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+    }
+    .btn-submit {
+      width: 100%; background: var(--blue); color: #fff;
+      border: none; padding: 0.85rem; border-radius: 7px;
+      font-size: 0.98rem; font-weight: 700; cursor: pointer;
+      font-family: inherit; margin-top: 0.3rem; transition: background 0.2s;
+    }
+    .btn-submit:hover { background: var(--blue-dark); }
+    .form-privacy { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 0.6rem; }
+    .success-msg { display: none; text-align: center; padding: 2rem 0; }
+    .success-msg .s-icon { font-size: 3rem; margin-bottom: 0.8rem; }
+    .success-msg h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .success-msg p { color: var(--muted); font-size: 0.9rem; }
+
+    /* FOOTER */
+    footer {
+      background: #111827; color: #9ca3af;
+      padding: 2.5rem 2rem; text-align: center;
+    }
+    .footer-inner { max-width: 900px; margin: 0 auto; }
+    .footer-logo { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 0.4rem; }
+    .footer-logo span { color: var(--blue-light); }
+    footer p { font-size: 0.82rem; }
+    footer a { color: #6b7280; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 600px) {
+      .stats-inner { gap: 1.5rem; }
+      nav a:not(.btn-header) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">⚖️</div>
+      HR Tutor <span>AI</span>
+    </a>
+    <nav>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#registro" class="btn-header">Diagnóstico gratis →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🤖 Inteligencia Artificial para RRHH y Normativa Laboral</div>
+    <h1>Blinda tu empresa de demandas<br><span>laborales con IA disponible 24/7</span></h1>
+    <p class="hero-sub">Asesórate en normativa laboral, valida procedimientos y gestiona contratos, despidos y sanciones sin errores ni riesgos legales.</p>
+    <form class="hero-form" id="heroForm">
+      <input type="text" placeholder="Tu nombre" required />
+      <input type="email" placeholder="Tu correo empresarial" required />
+      <button type="submit">Diagnóstico gratis →</button>
+    </form>
+    <p class="hero-note">🔒 Sin spam · Sin tarjeta de crédito · Acceso inmediato</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Disponibilidad garantizada</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">-80%</div>
+      <div class="stat-label">Reducción de errores en procesos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Basado en normativa vigente</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5 min</div>
+      <div class="stat-label">Para resolver cualquier consulta</div>
+    </div>
+  </div>
+</div>
+
+<!-- BENEFICIOS -->
+<section class="benefits" id="beneficios">
+  <div class="section-inner">
+    <p class="section-label">Resultados reales</p>
+    <h2>Lo que gana tu empresa<br>al usar HR Tutor AI</h2>
+    <p class="section-sub">No vendemos características, vendemos resultados que protegen tu empresa y mejoran tu equipo.</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon bi-blue">⚖️</div>
+        <h3>Elimina el riesgo de demandas laborales</h3>
+        <p>La IA valida cada procedimiento disciplinario, despido o sanción antes de ejecutarlo, asegurando el cumplimiento del debido proceso en todo momento.</p>
+        <span class="benefit-tag">✓ Seguridad jurídica garantizada</span>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon bi-green">📊</div>
+        <h3>Toma decisiones con datos, no con intuición</h3>
+        <p>Genera informes automáticos con indicadores clave de tu fuerza laboral: rotación, ausentismo, clima organizacional y riesgos jurídicos en tiempo real.</p>
+        <span class="benefit-tag" style="background:#d1fae5;color:#059669">✓ Reportes accionables al instante</span>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon bi-purple">🔄</div>
+        <h3>Reduce la rotación y mejora el clima laboral</h3>
+        <p>Onboarding automatizado, mediación de conflictos y simulador de situaciones laborales para que tu equipo se sienta respaldado desde el primer día.</p>
+        <span class="benefit-tag" style="background:#ede9fe;color:#7c3aed">✓ Retención del talento mejorada</span>
+      </div>
+    </div>
+    <div class="incentivo">
+      <p>🎁 <span>Oferta de lanzamiento:</span> Regístrate hoy y recibe tu <strong>diagnóstico legal-laboral gratuito</strong> — evaluamos los riesgos actuales de tu empresa sin costo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMAS -->
+<section class="problems">
+  <div class="section-inner">
+    <p class="section-label">El problema</p>
+    <h2>¿Te identificas con alguno<br>de estos escenarios?</h2>
+    <p class="section-sub">Son las frustraciones más comunes en las áreas de RRHH en Colombia y Latinoamérica.</p>
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="p-icon">⚠️</div>
+        <h4>Demandas laborales inesperadas</h4>
+        <p>Un procedimiento mal ejecutado puede costarle millones a tu empresa, aunque hayas actuado "de buena fe".</p>
+      </div>
+      <div class="problem-card">
+        <div class="p-icon">💸</div>
+        <h4>Alta rotación = sobrecostos</h4>
+        <p>Cada empleado que sale implica liquidación, búsqueda, contratación y capacitación. El ciclo no para.</p>
+      </div>
+      <div class="problem-card">
+        <div class="p-icon">📋</div>
+        <h4>Normativa laboral en constante cambio</h4>
+        <p>Seguir cada actualización legal manualmente es imposible. Un error por desactualización puede ser muy costoso.</p>
+      </div>
+      <div class="problem-card">
+        <div class="p-icon">😤</div>
+        <h4>Conflictos internos sin mediación</h4>
+        <p>Los conflictos no resueltos escalan rápido y destruyen el clima laboral antes de que te des cuenta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
+  <div class="section-inner">
+    <p class="section-label">Productos y servicios</p>
+    <h2>Todo lo que HR Tutor AI<br>hace por tu empresa</h2>
+    <p class="section-sub">Un ecosistema completo para gestionar tu área de RRHH con respaldo legal inteligente.</p>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Asesor IA en normativa laboral</h4>
+          <p>Consultas en tiempo real sobre legislación vigente</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Validador de procedimientos</h4>
+          <p>Revisa despidos, sanciones y contratos antes de firmar</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Generador de informes</h4>
+          <p>Reportes automáticos con métricas clave de tu equipo</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Alertas de actualización normativa</h4>
+          <p>Notificaciones cuando cambia la ley laboral</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Simulador de situaciones laborales</h4>
+          <p>Anticipa consecuencias legales antes de actuar</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Mediador de conflictos</h4>
+          <p>Guía neutral para resolver disputas internas</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Onboarding automatizado</h4>
+          <p>Proceso de vinculación estándar y sin errores</p>
+        </div>
+      </div>
+      <div class="service-item">
+        <div class="service-check">✓</div>
+        <div>
+          <h4>Disponibilidad 24/7</h4>
+          <p>Sin horarios de oficina, sin esperas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="how" id="como-funciona">
+  <div class="section-inner">
+    <p class="section-label">Proceso simple</p>
+    <h2>Empieza en 3 pasos</h2>
+    <p class="section-sub">Sin instalaciones complicadas. Sin curvas de aprendizaje largas.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Regístrate gratis</h3>
+        <p>Crea tu cuenta con nombre y correo. Sin tarjeta, sin contratos.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Describe tu situación</h3>
+        <p>Cuéntale a la IA tu consulta, el cargo y el contexto. En lenguaje natural, sin tecnicismos.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Recibe asesoría inmediata</h3>
+        <p>La IA analiza, valida contra la normativa vigente y te entrega recomendaciones accionables al instante.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM PRINCIPAL -->
+<section class="form-section" id="registro">
+  <div class="form-layout">
+    <div class="form-left">
+      <h2>¿Tu empresa está realmente protegida?</h2>
+      <p>Recibe un diagnóstico gratuito de los riesgos laborales actuales de tu organización. Sin compromiso.</p>
+      <ul class="check-list">
+        <li>Diagnóstico legal-laboral sin costo</li>
+        <li>Acceso inmediato al asesor IA</li>
+        <li>Primer informe de riesgos incluido</li>
+        <li>Sin tarjeta de crédito requerida</li>
+      </ul>
+    </div>
+    <div class="wp-form">
+      <h3>Empieza gratis hoy</h3>
+      <p class="form-sub">Únete a las empresas que ya protegen su RRHH con HR Tutor AI</p>
+      <form id="leadForm">
+        <div class="fg">
+          <label>Nombre completo</label>
+          <input type="text" placeholder="Ej. Carlos Mendoza" required />
+        </div>
+        <div class="fg">
+          <label>Correo empresarial</label>
+          <input type="email" placeholder="tu@empresa.com" required />
+        </div>
+        <button type="submit" class="btn-submit">Quiero mi diagnóstico gratuito →</button>
+        <p class="form-privacy">🔒 Tu información está segura. No compartimos tus datos.</p>
+      </form>
+      <div class="success-msg" id="successMsg">
+        <div class="s-icon">✅</div>
+        <h3>¡Registro exitoso!</h3>
+        <p>Te enviamos el acceso a tu correo.<br>Revisa también la carpeta de spam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">HR Tutor <span>AI</span></div>
+    <p>Asesoría en Recursos Humanos y Normativa Laboral con Inteligencia Artificial</p>
+    <p style="margin-top:0.6rem">
+      © 2025 HR Tutor AI &nbsp;·&nbsp;
+      <a href="#">Política de privacidad</a> &nbsp;·&nbsp;
+      <a href="#">Términos de uso</a> &nbsp;·&nbsp;
+      hola@hrtutorai.co
+    </p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('heroForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('registro').scrollIntoView({ behavior: 'smooth' });
+  });
+  document.getElementById('leadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
